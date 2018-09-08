@@ -73,13 +73,13 @@ publishing {
             }
 
             pom {
-                name = 'fastText4j'
-                description = 'Java(kotlin) implementation of the Fasebook \'s FastText'
+                name = 'maya-simple-blas'
+                description = '简单的BLAS库，包含基本的matrix和向量计算'
                 url = 'https://github.com/mayabot/fastText4j'
                 licenses {
                     license {
-                        name = 'BSD 3-Clause License'
-                        url = 'https://github.com/facebookresearch/fastText/blob/master/LICENSE'
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
                 developers {
@@ -90,9 +90,9 @@ publishing {
                     }
                 }
                 scm {
-                    connection = 'scm:git:git@github.com:mayabot/fastText4j.git'
-                    developerConnection = 'scm:git:git@github.com:mayabot/fastText4j.git'
-                    url = 'git@github.com:mayabot/fastText4j.git'
+                    connection = 'scm:git:git@github.com:mayabot/maya-simple-blas.git'
+                    developerConnection = 'scm:git:git@github.com:mayabot/maya-simple-blas.git'
+                    url = 'git@github.com:mayabot/maya-simple-blas.git'
                 }
             }
         }
