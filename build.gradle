@@ -1,0 +1,140 @@
+
+plugins {
+    id "org.jetbrains.kotlin.jvm" version "1.2.50"
+    id 'java'
+    id 'maven-publish'
+    id 'signing'
+}
+
+
+description = '简单的BLAS库，包含基本的matrix和向量计算'
+version = "1.0.0-SNAPSHOT"
+//.BUILD-SNAPSHOT
+
+group = "com.mayabot"
+
+repositories {
+    mavenCentral()
+}
+
+sourceSets {
+    example {
+        compileClasspath += sourceSets.main.runtimeClasspath
+        runtimeClasspath += sourceSets.main.runtimeClasspath
+    }
+
+    main.kotlin.srcDirs = main.java.srcDirs
+    test.kotlin.srcDirs = test.java.srcDirs
+    example.kotlin.srcDirs = example.java.srcDirs
+}
+
+dependencies {
+
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+
+    compile group: 'com.google.guava', name: 'guava', version: "19.0"
+
+    testCompile 'junit:junit:4.12'
+}
+
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier "javadoc"
+    from javadoc.destinationDir
+}
+
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+    options.encoding = "UTF-8"
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+    options.compilerArgs += ["-Xdoclint:none", "-Xlint:none", "-nowarn"]
+}
+
+
+publishing {
+    publications {
+        java(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+
+            artifact javadocJar {
+                classifier "javadoc"
+            }
+
+            pom {
+                name = 'fastText4j'
+                description = 'Java(kotlin) implementation of the Fasebook \'s FastText'
+                url = 'https://github.com/mayabot/fastText4j'
+                licenses {
+                    license {
+                        name = 'BSD 3-Clause License'
+                        url = 'https://github.com/facebookresearch/fastText/blob/master/LICENSE'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'jimichan'
+                        name = 'Jimi chan'
+                        email = 'jimichan@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:mayabot/fastText4j.git'
+                    developerConnection = 'scm:git:git@github.com:mayabot/fastText4j.git'
+                    url = 'git@github.com:mayabot/fastText4j.git'
+                }
+            }
+        }
+
+    }
+
+    repositories {
+        if(oss_user){
+            maven {
+                name 'OssPublic'
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url "https://oss.sonatype.org/content/repositories/snapshots/"
+                } else {
+                    url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                }
+                credentials{
+                    username "${oss_user}"
+                    password "${oss_password}"
+                }
+            }
+        }
+
+        if(project.hasProperty("maya_pri_user")){
+            maven {
+                name 'MayaPrivate'
+                if (project.version.endsWith('-SNAPSHOT')) {
+                    url "${maya_pri_snapshot}"
+                } else {
+                    url = "${maya_pri_release}"
+                }
+                credentials{
+                    username "${maya_pri_user}"
+                    password "${maya_pri_pass}"
+                }
+            }
+        }
+    }
+
+
+}
+
+
+signing {
+    sign publishing.publications.java
+}
