@@ -100,7 +100,7 @@ publishing {
     }
 
     repositories {
-        if(oss_user){
+        if(project.hasProperty("oss_user")){
             maven {
                 name 'OssPublic'
                 if (project.version.endsWith('-SNAPSHOT')) {
