@@ -55,6 +55,10 @@ class MutableFloatArrayMatrix(rows: Int, cols: Int) : BaseMatrix(rows, cols), Mu
         }
     }
 
+    override fun toMutableFloatMatrix(): MutableFloatMatrix {
+        return this
+    }
+
     /**
      * 均值为0
      * @param sd 标准差
@@ -112,6 +116,10 @@ class MutableByteBufferMatrix(rows: Int, cols: Int, direct: Boolean = true) : Ba
         for (i in 0 until length step 4) {
             data.putFloat(i, rnd.nextFloat() * (a - lower) + lower)
         }
+    }
+
+    override fun toMutableFloatMatrix(): MutableFloatMatrix {
+        return this
     }
 
     /**

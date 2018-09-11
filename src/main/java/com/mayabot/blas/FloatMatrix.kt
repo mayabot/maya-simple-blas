@@ -26,6 +26,8 @@ interface FloatMatrix {
         }
     }
 
+    fun toMutableFloatMatrix(): MutableFloatMatrix
+
     companion object {
         fun byteBufferMatrix(rows: Int, cols: Int) = MutableByteBufferMatrix(rows, cols, false)
         fun directByteBufferMatrix(rows: Int, cols: Int) = MutableByteBufferMatrix(rows, cols, true)
@@ -142,6 +144,14 @@ class FloatArrayMatrix(rows: Int, cols: Int, val data: FloatArray) : BaseMatrix(
         }
     }
 
+    override fun toMutableFloatMatrix(): MutableFloatMatrix {
+        val to = MutableFloatArrayMatrix(rows, cols)
+
+        System.arraycopy(this.data, 0, to.data, 0, rows * cols)
+
+        return to
+    }
+
     //private var length = rows * cols
 
     private val rowView = (0 until rows).mapIndexed { index, _ -> FloatArrayVector(data, index * cols, cols) }.toTypedArray()
@@ -187,6 +197,14 @@ class ByteBufferMatrix(rows: Int, cols: Int, val data: ByteBuffer) : BaseMatrix(
 
         channel.write(data)
     }
+
+    override fun toMutableFloatMatrix(): MutableFloatMatrix {
+        val inputMatrix = MutableFloatArrayMatrix(rows, cols)
+        for (i in 0 until rows) {
+            inputMatrix[i] += this[i]
+        }
+        return inputMatrix
+    }
 }
 
 
@@ -228,5 +246,13 @@ class AreaByteBufferMatrix(rows: Int, cols: Int, val data: List<ByteBuffer>) : B
             x.limit(x.capacity())
             channel.write(x)
         }
+    }
+
+    override fun toMutableFloatMatrix(): MutableFloatMatrix {
+        val inputMatrix = MutableFloatArrayMatrix(rows, cols)
+        for (i in 0 until rows) {
+            inputMatrix[i] += this[i]
+        }
+        return inputMatrix
     }
 }
