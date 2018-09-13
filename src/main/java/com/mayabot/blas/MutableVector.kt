@@ -45,6 +45,10 @@ class MutableFloatArrayVector(data: FloatArray,
 
     constructor(size: Int) : this(FloatArray(size), 0, size)
 
+    companion object {
+        private const val serialVersionUID: Long = 1122L
+    }
+
     override fun fill(v: Number) {
         val v = v.toFloat()
         for (i in offset until offset + length) {
@@ -96,7 +100,7 @@ class MutableFloatArrayVector(data: FloatArray,
         val scale = v.first.toFloat()
         val vector = v.second
         if (scale == 1.0f) {
-            plusAssign(v)
+            plusAssign(v.second)
         } else {
             var j = 0
             for (i in offset until offset + length) {
@@ -141,6 +145,10 @@ class MutableByteBufferVector(data: ByteBuffer,
                               offset: Int, length: Int) : ByteBufferVector(data, offset, length), MutableVector {
 
     constructor(size: Int) : this(ByteBuffer.allocate(size shl 2), 0, size)
+
+    companion object {
+        private const val serialVersionUID: Long = 3245L
+    }
 
     override fun fill(v: Number) {
         val v = v.toFloat()

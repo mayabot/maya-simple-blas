@@ -1,6 +1,7 @@
 package com.mayabot.blas
 
 import java.io.File
+import java.io.Serializable
 import java.nio.ByteBuffer
 import java.nio.channels.FileChannel
 import java.util.*
@@ -10,7 +11,7 @@ import kotlin.math.min
 /**
  * 不可变的Float矩阵
  */
-interface FloatMatrix {
+interface FloatMatrix : Serializable {
     fun rows(): Int
     fun cols(): Int
     operator fun get(row: Int): Vector

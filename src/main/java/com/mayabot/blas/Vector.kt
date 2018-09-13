@@ -1,6 +1,7 @@
 package com.mayabot.blas
 
 import com.google.common.base.Preconditions.checkArgument
+import java.io.Serializable
 import java.nio.ByteBuffer
 
 
@@ -8,7 +9,8 @@ import java.nio.ByteBuffer
  * 只读的Float向量
  * @author jimichan
  */
-interface Vector {
+interface Vector : Serializable {
+
 
     fun subVector(offset: Int, size: Int): Vector
 
@@ -44,6 +46,7 @@ interface Vector {
     fun access(call: (Int, Float) -> Unit)
 
     companion object {
+
         fun byteBufferVector(size: Int) = MutableByteBufferVector(ByteBuffer.allocate(size shl 2), 0, size)
         fun directByteBufferVector(size: Int) = MutableByteBufferVector(ByteBuffer.allocateDirect(size shl 2), 0, size)
         fun floatArrayVector(size: Int) = MutableFloatArrayVector(size)
@@ -71,6 +74,10 @@ open class FloatArrayVector(@JvmField protected val data: FloatArray,
                             @JvmField protected val length: Int) : Vector {
 
     constructor(data: FloatArray) : this(data, 0, data.size)
+
+    companion object {
+        private const val serialVersionUID: Long = 112L
+    }
 
     override fun subVector(offset: Int, size: Int): Vector {
         val result = FloatArray(size)
@@ -187,6 +194,10 @@ open class FloatArrayVector(@JvmField protected val data: FloatArray,
 open class ByteBufferVector(@JvmField protected val data: ByteBuffer,
                             @JvmField protected val offset: Int,
                             @JvmField protected val length: Int) : Vector {
+
+    companion object {
+        private const val serialVersionUID: Long = 1234234218L
+    }
 
     constructor(data: ByteBuffer) : this(data, 0, data.capacity() / 4)
 
