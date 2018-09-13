@@ -8,7 +8,7 @@ plugins {
 
 
 description = '简单的BLAS库，包含基本的matrix和向量计算'
-version = "1.1.2"
+version = "1.1.3-SNAPSHOT"
 //.BUILD-SNAPSHOT
 
 group = "com.mayabot"
